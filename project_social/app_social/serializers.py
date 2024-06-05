@@ -19,6 +19,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ['user', 'first_name', 'last_name']
 
 class MessageSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(many=False)
+    created_at = serializers.DateTimeField(format='%Y-%m-%d %H:%M:%S') #Python's strftime function.
+    
     class Meta:
         model = Message
         fields = ['id', 'user', 'content', 'created_at']

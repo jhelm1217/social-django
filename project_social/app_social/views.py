@@ -33,24 +33,6 @@ def create_user(request):
     return Response(profile_serialized.data)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_profile(request):
-    user = request.user
-    profile = user.profile
-    serialized_profile = ProfileSerializer(profile, many=False)
-    return Response(serialized_profile.data)
-
-
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_messages(request):
-    user = request.user
-    messages = Message.objects.all()
-    serialized_messages = MessageSerializer(messages, many=True)
-    return Response(serialized_messages.data)
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_message(request):
@@ -67,7 +49,6 @@ def create_message(request):
 
 
 
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
@@ -77,6 +58,52 @@ def create_image(request):
     image_serialized.save()
     return Response(image_serialized.data, status=status.HTTP_201_CREATED )
   return Response(image_serialized.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_message(request):
+  message = Message.objects.get(id=request.data['id'])
+  message.delete()
+  return Response()
+
+   
+ #if the message is availiabe, then it is updated and serializes and returned in the reponse, otherwise, it will 
+ #return an error code becuase the message can't be found
+
+# @api_view(['PUT'])
+# @permission_classes([IsAuthenticated])
+# def edit_message(request, message_id):
+#     message = Message.objects.filter(id=message_id).first()
+#     if not message:
+#        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+#     message.content = request.data.get('content', message.content)
+#     message.save()
+#     message_serialized = MessageSerializer(message)
+#     return Response(message_serialized.data)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_profile(request):
+    user = request.user
+    profile = user.profile
+    serialized_profile = ProfileSerializer(profile, many=False)
+    return Response(serialized_profile.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_messages(request):
+    user = request.user
+    messages = Message.objects.all()
+    serialized_messages = MessageSerializer(messages, many=True)
+    return Response(serialized_messages.data)
+
+
+
 
 
 @api_view(['GET'])
