@@ -42,25 +42,30 @@ def get_profile(request):
     return Response(serialized_profile.data)
 
 
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def create_m
 
-
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def message_poll(request):
-    if request.method == 'GET':
-        messages = Message.objects.all().orby_by('-created_at')
-        serializer = MessageSerializer(messages, many=True)
-        return Response(serializer.data)
-    if request.method == 'POST':
-        serializer = MessageSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+def get_messages(request):
+    user = request.user
+    messages = Message.objects.all()
+    serialized_messages = MessageSerializer(messages, many=True)
+    return Response(serialized_messages.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_message(request):
+    # user = User.objects.get(username=request.data['username']) 
+    user = request.user
+    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!! ", request.data)
+    message = Message.objects.create(
+        user=user,
+        content=request.data['content'],
+    )
+    message.save()
+    message_serialized = MessageSerializer(message)
+    return Response(message_serialized.data)
+
+
 
 
 @api_view(['POST'])
@@ -99,3 +104,20 @@ class MessageViewSet(viewsets.ModelViewSet):
 class ImageViewSet(viewsets.ModelViewSet):
    queryset = Image.objects.all()
    serializer_class = ImageSerializer
+
+
+
+# @api_view(['GET', 'POST'])
+# @permission_classes([IsAuthenticated])
+# def message_poll(request):
+#     if request.method == 'GET':
+#         messages = Message.objects.all().orby_by('-created_at')
+#         serializer = MessageSerializer(messages, many=True)
+#         return Response(serializer.data)
+#     if request.method == 'POST':
+#         serializer = MessageSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(user=request.user)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

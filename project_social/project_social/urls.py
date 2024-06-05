@@ -34,7 +34,7 @@ from rest_framework import routers
 router = DefaultRouter()
 router.register(r'user', UserViewSet)
 router.register(r'profiles', ProfileViewSet)
-router.register(r'message', MessageViewSet)
+router.register(r'messages', MessageViewSet)
 router.register(r'image', ImageViewSet)
 
 
@@ -44,7 +44,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('create-user/', create_user),
     path('get-profile/', get_profile),
-    path('message-poll/', message_poll),
+    path('create-message/', create_message),
+    path('get-messages/', get_messages),
     path('create-image/', create_image),
     path('get-images/', get_images),
     path('refresh/', TokenRefreshView.as_view()),

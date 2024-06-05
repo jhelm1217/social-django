@@ -4,9 +4,12 @@ from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
+    # username = serializers.SerializerMethodField() #user w
+
     class Meta:
         model = User
         fields = ['id', 'username', 'password'] 
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
