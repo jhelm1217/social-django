@@ -46,7 +46,6 @@ urlpatterns = [
     path('create-message/', create_message),
     path('create-image/', create_image),
     path('delete-message', delete_message),
-    # path('edit-message', edit_message),
     path('get-messages/', get_messages),
     path('get-profile/', get_profile),
     path('get-images/', get_images),

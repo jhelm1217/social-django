@@ -17,7 +17,9 @@ class Message(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
+    image = models.TextField(blank=True, null=True)
+    # image = models.ImageField(upload_to='images/', blank=True)
+    # image = models.URLField(blank=True)
 
     def __str__(self):
         return f'{self.user.username}: {self.content}'

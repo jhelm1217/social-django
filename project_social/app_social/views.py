@@ -42,6 +42,7 @@ def create_message(request):
     message = Message.objects.create(
         user=user,
         content=request.data['content'],
+        image=request.data['image'],
     )
     message.save()
     message_serialized = MessageSerializer(message)
@@ -68,20 +69,16 @@ def delete_message(request):
   return Response()
 
    
- #if the message is availiabe, then it is updated and serializes and returned in the reponse, otherwise, it will 
- #return an error code becuase the message can't be found
 
-# @api_view(['PUT'])
-# @permission_classes([IsAuthenticated])
-# def edit_message(request, message_id):
-#     message = Message.objects.filter(id=message_id).first()
-#     if not message:
-#        return Response(status=status.HTTP_404_NOT_FOUND)
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def edit_message(request, message_id):
+    message = Message.objects.filter(id=message_id).first()
     
-#     message.content = request.data.get('content', message.content)
-#     message.save()
-#     message_serialized = MessageSerializer(message)
-#     return Response(message_serialized.data)
+    message.content = request.data.get('content', message.content)
+    message.save()
+    message_serialized = MessageSerializer(message)
+    return Response(message_serialized.data)
 
 
 
@@ -134,17 +131,3 @@ class ImageViewSet(viewsets.ModelViewSet):
 
 
 
-# @api_view(['GET', 'POST'])
-# @permission_classes([IsAuthenticated])
-# def message_poll(request):
-#     if request.method == 'GET':
-#         messages = Message.objects.all().orby_by('-created_at')
-#         serializer = MessageSerializer(messages, many=True)
-#         return Response(serializer.data)
-#     if request.method == 'POST':
-#         serializer = MessageSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save(user=request.user)
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
